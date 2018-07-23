@@ -15,7 +15,7 @@
 #include "map.hpp"
 
 using namespace std;
-
+struct Node;
 struct Node {
     vector<Node *> children;
     Node *parent;

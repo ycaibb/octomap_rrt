@@ -25,10 +25,12 @@ Map::Map(float resolution, point3d bbx_max, point3d bbx_min)
 Map::Map(std::string file_name)
 {
     map_tree_ = new octomap::OcTree(file_name);
-    bbx_max_ = map_tree_->getBBXMax();
-    bbx_min_ = map_tree_->getBBXMin();
-//    map_tree_->setBBXMax(bbx_max_);
-//    map_tree_->setBBXMin(bbx_min_);
+//    bbx_max_ = map_tree_->getBBXMax();
+//    bbx_min_ = map_tree_->getBBXMin();
+    bbx_max_ = octomap::point3d(40,40,40);
+    bbx_min_ = octomap::point3d(0,0,0);
+    map_tree_->setBBXMax(bbx_max_);
+    map_tree_->setBBXMin(bbx_min_);
 }
 Map::~Map()
 {
