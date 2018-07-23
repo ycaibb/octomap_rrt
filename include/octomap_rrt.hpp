@@ -30,12 +30,13 @@ public:
     void deleteNodes(Node *root);
     Node* findNearestNode(octomap::point3d current_position);
     Node* getRandomNotObstacleNode();
-    Node* getNewNode(Node *q, Node *q_nearest);
+    Node* getNewNode(Node *q, Node *q_nearest, octomap::point3d direction);
     void addNewNode(Node *q_nearest, Node *q_new);
+    bool isNewNodeCollision(octomap::point3d q_new, octomap::point3d q_nearest, octomap::point3d direction);
     bool isArrived();
     
     void run();
-    
+    void writeMap();
 private:
     vector<Node *> nodes_;
     vector<Node *> path_;
