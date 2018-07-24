@@ -7,7 +7,7 @@
 //
 
 #include "../include/octomap_rrt.hpp"
-#include <octomap/ColorOcTree.h>
+#include <chrono>
 
 RRT3D::RRT3D(octomap::point3d start_position, octomap::point3d end_position, Map *map, int max_iter, short step_size)
 {
@@ -120,12 +120,15 @@ bool RRT3D::isArrived()
     return false;
 }
 
-void RRT3D::run()
+void RRT3D::run(bool debug)
 {
     srand(static_cast<ushort>(time(NULL)));
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
     for(int i=0; i<max_iter_; i++){
-        if(i%100==0)
-            std::cout<<"i="<<i<<std::endl;
+        if(debug)
+            if(i%100==0)
+                std::cout<<"i="<<i<<std::endl;
         Node *q_rand = getRandomNotObstacleNode();
 //        std::cout<<"random_point: "<<q_rand->position<<std::endl;
         Node *q_nearest = findNearestNode(q_rand->position);
@@ -150,6 +153,9 @@ void RRT3D::run()
         q = findNearestNode(end_position_);
         std::cout<<"Can not find the path\n";
     }
+    end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout<<"calculate_time = "<<elapsed_seconds.count()<<"s\n";
     while(q!=NULL){
         path_.push_back(q);
         q = q->parent;

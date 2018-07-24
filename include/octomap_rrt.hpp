@@ -35,7 +35,7 @@ public:
     bool isNewNodeCollision(octomap::point3d q_new, octomap::point3d q_nearest, octomap::point3d direction);
     bool isArrived();
     
-    void run();
+    void run(bool debug);
     void writeMap();
 private:
     vector<Node *> nodes_;
