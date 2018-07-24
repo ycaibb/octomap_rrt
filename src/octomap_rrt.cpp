@@ -8,7 +8,7 @@
 
 #include "../include/octomap_rrt.hpp"
 #include <chrono>
-
+#include <fstream>
 RRT3D::RRT3D(octomap::point3d start_position, octomap::point3d end_position, Map *map, int max_iter, short step_size)
 {
     start_position_ = start_position;
@@ -164,10 +164,38 @@ void RRT3D::run(bool debug)
 
 void RRT3D::writeMap()
 {
-    //visualize
+    //visualize path by writing path into map module
     for(auto node: path_){
         std::cout<<node->position<<std::endl;
         map_->mixPathMap(node->position, true);
-        //        path_tree->setNodeColor(node->position.x(),node->position.y(),node->position.x(), 255, 0, 0);
     }
+}
+void RRT3D::writeInfo2File(std::string output_name)
+{
+    double distance = 0;
+    double tmp_distance = 0;
+    ofstream fout;
+    fout.open(output_name);
+    //write basic infomation to file
+    fout<<"step_size = "<<step_size_<<std::endl;
+    fout<<"max_iter = "<<max_iter_<<std::endl;
+    fout<<"start_position = "<<start_position_<<"\tend_position = "<<end_position_<<std::endl;
+    //write position of path-node and distance between two nodes 
+    fout<<"START_POSITION\t\t\t"<<"END_POSITION\t\t\t"<<"DISTANCE\t"<<"TOTAL_DISTANCE\n";
+    for (int i=path_.size()-1; i>0; i--){
+        tmp_distance = (path_[i]->position - path_[i-1]->position).norm();
+        fout<<path_[i]->position<<"\t"<<path_[i-1]->position<<"\t"<<tmp_distance<<"\t";
+        distance += tmp_distance;
+        fout<<distance<<std::endl;
+    }
+    //write distance between last_node_position and end_position 
+    fout<<"LAST_NODE_POSITION\t\t\t"<<"FINAL_POSITION\t\t\t"<<"DISTANCE\t"<<"TOTAL_DISTANCE\n";
+    tmp_distance = (end_position_ - path_[0]->position).norm();
+    fout<<path_[0]->position<<"\t"<<end_position_<<"\t"<<tmp_distance<<"\t";
+    distance += tmp_distance;
+    fout<<distance<<std::endl;
+
+    std::cout<<"distance = "<<distance<<std::endl;
+    fout<<flush;
+    fout.close();
 }

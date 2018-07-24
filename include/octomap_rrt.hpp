@@ -37,6 +37,7 @@ public:
     
     void run(bool debug);
     void writeMap();
+    void writeInfo2File(std::string output_name);
 private:
     vector<Node *> nodes_;
     vector<Node *> path_;
