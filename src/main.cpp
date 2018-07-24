@@ -11,9 +11,6 @@
 #include <octomap/octomap.h>
 #include <octomap/ColorOcTree.h>
 
-using namespace std;
-using namespace octomap;
-
 int main(int argc, char** argv) {
     Map* map = new Map("./hello_2.bt");
     octomap::point3d start_position(0,0,0);
